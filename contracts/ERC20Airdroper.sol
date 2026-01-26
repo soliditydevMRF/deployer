@@ -26,7 +26,7 @@ contract ERC20Airdroper {
 }
 
 
-// pragma solidity ^0.8.29;
+/// pragma solidity ^0.8.29;
 // import "./IUtilityContract.sol";
 
 // contract BigBoss is IUtilityContract{
