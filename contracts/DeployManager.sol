@@ -16,9 +16,7 @@ contract DeployManager is Ownable {
     error ContractDoesNotRegistered();
     error InitializationFailed();
 
-    constructor() Ownable(msg.sender) {
-
-    }
+    constructor() Ownable(msg.sender) {}
 
     struct ContractInfo{
         uint256 fee;
@@ -30,13 +28,13 @@ contract DeployManager is Ownable {
     //@notice contract address => info
     mapping(address => ContractInfo) public contractsData;
 
-    function depoloy(address _utilityContract, bytes calldata _initData) external payable returns(address) {
+    function deploy(address _utilityContract, bytes calldata _initData) external payable returns(address) {
         ContractInfo memory info = contractsData[_utilityContract];
         require(info.isActive, ContractNotActive());
         require(msg.value >= info.fee, NotEnoughtFunds());
         require(info.registeredAt > 0, ContractDoesNotRegistered());
 
-        address clone = Clones.clone(_utilityContract);
+        address clone = Clones.clone(_utilityContract); //адрес нового контракта
 
         require(IUtilityContract(clone).initialize(_initData), InitializationFailed()); 
 
@@ -44,7 +42,7 @@ contract DeployManager is Ownable {
 
         deployedContracts[msg.sender].push(clone);
 
-        emit NewDeployment( msg.sender, clone, msg.value, block.timestamp);
+        emit NewDeployment(msg.sender, clone, msg.value, block.timestamp);
 
         return clone;
     }
