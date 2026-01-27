@@ -77,3 +77,11 @@ contract DeployManager is Ownable {
 
 
 }
+
+// 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4 owner
+
+//0xB098aE7ddc405A6a6F891693e00c8B9895e1a93f deploy
+
+//0xd457540c3f08f7F759206B5eA9a4cBa321dE60DC airdroper
+
+//0xc6b336BE77D9A30776f044375A96224303d07F03 new aidroper
