@@ -58,7 +58,7 @@ contract Vesting is IUtilityContract, Ownable {
     }
   
     
-    
+    //
     //берем tokenAddress, totalAmount,owner
     //startVesring- принимает все переменные в параметры
     function initialize(bytes memory _initData) notInitialized external returns(bool) {       
