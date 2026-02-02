@@ -98,7 +98,7 @@ contract Vesting is IUtilityContract, Ownable {
         }
         return (vesting.totalAmount * passedTime) / vesting.duration;    
     }
-
+  
     
     function claimableAmount(address _claimer) public view returns(uint256) { // остаток незаклеймленных
     VestingInfo storage vesting = vestings[_claimer];
