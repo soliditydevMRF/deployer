@@ -18,7 +18,7 @@ contract DeployManager is Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    struct ContractInfo{
+    struct ContractInfo {
         uint256 fee;
         bool isActive;
         uint256 registeredAt;
