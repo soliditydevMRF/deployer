@@ -10,7 +10,6 @@ contract DeployManager is Ownable {
     event ContractStatusUpdated(address _contractAddress, bool _isActive, uint256 _timestamp);
     event NewDeployment(address _deployer, address _contractAddress, uint256 _fee, uint256 _timestamp);
 
-
     error ContractNotActive();
     error NotEnoughtFunds();
     error ContractDoesNotRegistered();
@@ -18,17 +17,17 @@ contract DeployManager is Ownable {
 
     constructor() Ownable(msg.sender) {}
 
-    struct ContractInfo{
+    struct ContractInfo {
         uint256 fee;
         bool isActive;
         uint256 registeredAt;
     }
-    //@notice user  =>   contracts[] 
-    mapping(address => address[]) public deployedContracts;    
+    //@notice user  =>   contracts[]
+    mapping(address => address[]) public deployedContracts;
     //@notice contract address => info
     mapping(address => ContractInfo) public contractsData;
 
-    function deploy(address _utilityContract, bytes calldata _initData) external payable returns(address) {
+    function deploy(address _utilityContract, bytes calldata _initData) external payable returns (address) {
         ContractInfo memory info = contractsData[_utilityContract];
         require(info.isActive, ContractNotActive());
         require(msg.value >= info.fee, NotEnoughtFunds());
@@ -36,7 +35,7 @@ contract DeployManager is Ownable {
 
         address clone = Clones.clone(_utilityContract); //адрес нового контракта
 
-        require(IUtilityContract(clone).initialize(_initData), InitializationFailed()); 
+        require(IUtilityContract(clone).initialize(_initData), InitializationFailed());
 
         payable(owner()).transfer(msg.value);
 
@@ -47,18 +46,17 @@ contract DeployManager is Ownable {
         return clone;
     }
 
-    function addNewContract(address _contractAddress, uint256 _fee, bool _isActive) external onlyOwner{
-        contractsData[_contractAddress] = ContractInfo({fee: _fee, isActive: _isActive, registeredAt: block.timestamp });
+    function addNewContract(address _contractAddress, uint256 _fee, bool _isActive) external onlyOwner {
+        contractsData[_contractAddress] = ContractInfo({fee: _fee, isActive: _isActive, registeredAt: block.timestamp});
 
         emit NewContractAdded(_contractAddress, _fee, _isActive, block.timestamp);
     }
 
     function updateFee(address _contractAddress, uint256 _newFee) external onlyOwner {
         require(contractsData[_contractAddress].registeredAt > 0, ContractDoesNotRegistered());
-        uint256 _oldFee = contractsData[_contractAddress].fee;        
+        uint256 _oldFee = contractsData[_contractAddress].fee;
         contractsData[_contractAddress].fee = _newFee;
-        
-        
+
         emit ContractFeeUpdated(_contractAddress, _oldFee, _newFee, block.timestamp);
     }
 
@@ -73,9 +71,6 @@ contract DeployManager is Ownable {
         contractsData[_address].isActive = true;
         emit ContractStatusUpdated(_address, true, block.timestamp);
     }
- 
-
-
 }
 
 // 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4 owner
