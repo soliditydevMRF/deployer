@@ -2,7 +2,7 @@
 pragma solidity ^0.8.29;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "../IUtilityContract.sol";
+import "../UtilityContract/IUtilityContract.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract ERC721Airdroper is IUtilityContract, Ownable {
