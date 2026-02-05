@@ -27,4 +27,3 @@ abstract contract AbstractUtilityContract is IUtilityContract, ERC165 {
     }
 }
 
-    

@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.29;
+import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/proxy/Clones.sol";
 import {IUtilityContract} from "../UtilityContract/IUtilityContract.sol";
 import "./IDeployManager.sol";
 
-contract DeployManager is IDeployManager, Ownable {
+contract DeployManager is IDeployManager, Ownable, ERC165 {
     error ContractNotActive();
     error NotEnoughtFunds();
     error ContractDoesNotRegistered();
@@ -66,6 +67,10 @@ contract DeployManager is IDeployManager, Ownable {
         require(contractsData[_address].registeredAt > 0, ContractDoesNotRegistered());
         contractsData[_address].isActive = true;
         emit ContractStatusUpdated(_address, true, block.timestamp);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(IERC165, ERC165) returns (bool) {
+        return interfaceId == type(IUtilityContract).interfaceId || super.supportsInterface(interfaceId);
     }
 }
 

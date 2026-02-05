@@ -3,7 +3,7 @@ pragma solidity ^0.8.29;
 
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 
-interface IUtilityContract is IERC165{
+interface IUtilityContract is IERC165 {
     error DeployManagerCantBeZero();
     error NotDeployManager();
 
