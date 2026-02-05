@@ -13,8 +13,8 @@ contract CroudFunding is VestingWallet {
     uint256 vestingDuration;
     bool private initialized;
 
-    //             цель               собирает деньги
-    constructor() {   _disableInitializers()};
+    //             цель               собирает деньг   и
+    constructor() {   _disableInitializers()}
       
       
 

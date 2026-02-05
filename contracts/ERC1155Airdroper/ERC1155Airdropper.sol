@@ -1,49 +1,55 @@
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.29;
+    pragma solidity ^0.8.29;
 
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import "../IUtilityContract.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+    import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+    import "../IUtilityContract.sol";
+    import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract ERC1155Airdroper is IUtilityContract, Ownable {
-    constructor() Ownable(msg.sender) {}
+    contract ERC1155Airdroper is IUtilityContract, Ownable {
+        constructor() Ownable(msg.sender) {}
 
-    IERC1155 public token;
-    address public treasury;
+        uint256 constant public MAX_AIRDROP_BATCH_SIZE = 10;
 
-    error AlareadyInitialized();
-    error ArraysLengthMismatch();
-    error NeedToApproveTokens();
-    error TransferFailed();
+        IERC1155 public token;
+        address public treasury;
 
-    modifier notInitialized() {
-        require(!initialized, AlareadyInitialized());
-        _;
+        error AlareadyInitialized();
+        error ResieversLengthMismatch();
+        error NeedToApproveTokens();
+        error TransferFailed();
+        error AmountsLengthMismatch();
+        error BatchSizeExceeded();
+
+        modifier notInitialized() {
+            require(!initialized, AlareadyInitialized());
+            _;
+        }
+
+        bool private initialized;
+
+        function initialize(bytes memory _initData) external notInitialized returns (bool) {
+            (address _token, address _treasury, address _owner) = abi.decode(_initData, (address, address, address));
+
+            token = IERC1155(_token);
+            treasury = _treasury;
+            Ownable.transferOwnership(_owner);
+
+            initialized = true;
+
+            return true;
     }
 
-    bool private initialized;
-
-    function initialize(bytes memory _initData) external notInitialized returns (bool) {
-        (address _token, address _treasury, address _owner) = abi.decode(_initData, (address, address, address));
-
-        token = IERC1155(_token);
-        treasury = _treasury;
-        Ownable.transferOwnership(_owner);
-
-        initialized = true;
-
-        return true;
-    }
-
-    function airdrop(address[] calldata _receivers, uint256[] calldata _amounts, uint256[] calldata tokenId)
+    function airdrop(address[] calldata _receivers, uint256[] calldata _amounts, uint256[] calldata tokenIds)
         external
         onlyOwner
     {
-        require(_receivers.length == _amounts.length && _receivers.length == tokenId.length, ArraysLengthMismatch());
+        require(tokenIds.length <= MAX_AIRDROP_BATCH_SIZE, BatchSizeExceeded());
+        require(_receivers.length == tokenIds.length, ResieversLengthMismatch());
+        require(_amounts.length == tokenIds.length, AmountsLengthMismatch());
         require(token.isApprovedForAll(treasury, address(this)), NeedToApproveTokens());
 
         for (uint256 i = 0; i < _amounts.length; i++) {
-            token.safeTransferFrom(treasury, _receivers[i], tokenId[i], _amounts[i], "");
+            token.safeTransferFrom(treasury, _receivers[i], tokenIds[i], _amounts[i], "");
         }
     }
 
