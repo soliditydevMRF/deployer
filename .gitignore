@@ -3,3 +3,5 @@
 contracts/artifacts
 artifacts
 node_modules
+out
+cache

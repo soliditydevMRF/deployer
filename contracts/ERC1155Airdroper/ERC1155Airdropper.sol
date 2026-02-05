@@ -1,42 +1,42 @@
 //SPDX-License-Identifier: MIT
-    pragma solidity ^0.8.29;
+pragma solidity ^0.8.29;
 
-    import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-    import "../IUtilityContract.sol";
-    import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import "../IUtilityContract.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-    contract ERC1155Airdroper is IUtilityContract, Ownable {
-        constructor() Ownable(msg.sender) {}
+contract ERC1155Airdroper is IUtilityContract, Ownable {
+    constructor() Ownable(msg.sender) {}
 
-        uint256 constant public MAX_AIRDROP_BATCH_SIZE = 10;
+    uint256 public constant MAX_AIRDROP_BATCH_SIZE = 10;
 
-        IERC1155 public token;
-        address public treasury;
+    IERC1155 public token;
+    address public treasury;
 
-        error AlareadyInitialized();
-        error ResieversLengthMismatch();
-        error NeedToApproveTokens();
-        error TransferFailed();
-        error AmountsLengthMismatch();
-        error BatchSizeExceeded();
+    error AlareadyInitialized();
+    error ResieversLengthMismatch();
+    error NeedToApproveTokens();
+    error TransferFailed();
+    error AmountsLengthMismatch();
+    error BatchSizeExceeded();
 
-        modifier notInitialized() {
-            require(!initialized, AlareadyInitialized());
-            _;
-        }
+    modifier notInitialized() {
+        require(!initialized, AlareadyInitialized());
+        _;
+    }
 
-        bool private initialized;
+    bool private initialized;
 
-        function initialize(bytes memory _initData) external notInitialized returns (bool) {
-            (address _token, address _treasury, address _owner) = abi.decode(_initData, (address, address, address));
+    function initialize(bytes memory _initData) external notInitialized returns (bool) {
+        (address _token, address _treasury, address _owner) = abi.decode(_initData, (address, address, address));
 
-            token = IERC1155(_token);
-            treasury = _treasury;
-            Ownable.transferOwnership(_owner);
+        token = IERC1155(_token);
+        treasury = _treasury;
+        Ownable.transferOwnership(_owner);
 
-            initialized = true;
+        initialized = true;
 
-            return true;
+        return true;
     }
 
     function airdrop(address[] calldata _receivers, uint256[] calldata _amounts, uint256[] calldata tokenIds)
