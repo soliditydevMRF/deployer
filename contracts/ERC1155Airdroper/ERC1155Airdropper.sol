@@ -13,18 +13,10 @@ contract ERC1155Airdroper is AbstractUtilityContract, Ownable {
     IERC1155 public token;
     address public treasury;
 
-    error AlreadyInitialized();
     error ReceiversLengthMismatch();
     error AmountsLengthMismatch();
     error BatchSizeExceeded();
     error NeedToApproveTokens();
-
-    modifier notInitialized() {
-        require(!initialized, AlreadyInitialized());
-        _;
-    }
-
-    bool private initialized;
 
     function airdrop(address[] calldata receivers, uint256[] calldata amounts, uint256[] calldata tokenIds)
         external

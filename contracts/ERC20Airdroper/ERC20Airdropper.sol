@@ -18,18 +18,10 @@ contract ERC20Airdroper is AbstractUtilityContract, Ownable {
     uint256 public amount;
     address public treasury;
 
-    error AlreadyInitialized();
     error ArraysLengthMismatch();
     error NotEnoughApprovedTokens();
     error TransferFailed();
     error BatchSizeExceeded();
-
-    modifier notInitialized() {
-        require(!initialized, AlreadyInitialized());
-        _;
-    }
-
-    bool private initialized;
 
     function airdrop(address[] calldata receivers, uint256[] calldata amounts) external onlyOwner {
         require(receivers.length <= MAX_AIRDROP_BATCH_SIZE, BatchSizeExceeded());

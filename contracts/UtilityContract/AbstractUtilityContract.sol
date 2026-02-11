@@ -11,7 +11,13 @@ import {IUtilityContract} from "./IUtilityContract.sol";
 /// @notice This abstract contract provides a base implementation for utility contracts.
 /// @dev Utility contracts should inherit from this contract and implement the initialize function.
 abstract contract AbstractUtilityContract is IUtilityContract, ERC165 {
+    bool public initialized;
     address public deployManager;
+
+    modifier notInitialized() {
+        require(!initialized, AlreadyInitialized());
+        _;
+    }
 
     function initialize(bytes memory _initData) external virtual override returns (bool) {
         deployManager = abi.decode(_initData, (address));

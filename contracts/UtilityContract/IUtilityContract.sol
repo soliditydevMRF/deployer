@@ -16,6 +16,7 @@ interface IUtilityContract is IERC165 {
     error DeployManagerCannotBeZero();
     error NotDeployManager();
     error FailedToDeployManager();
+    error AlreadyInitialized();
 
     // ------------------------------------------------------------------------
     // Functions
