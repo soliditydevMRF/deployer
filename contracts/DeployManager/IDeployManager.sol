@@ -4,7 +4,7 @@ pragma solidity ^0.8.29;
 import "@openzeppelin/contracts/interfaces/IERC165.sol";
 
 /// @title IDeployManager - Factory for utility contracts
-/// @author Solidity Univesity
+/// @author Ruslan Malikov
 /// @notice This interface defines the functions, errors and events for the DeployManager contract.
 interface IDeployManager is IERC165 {
     // ------------------------------------------------------------------------
