@@ -8,7 +8,7 @@ import "../UtilityContract/IUtilityContract.sol";
 import "./IDeployManager.sol";
 
 /// @title DeployManager - Factory for utility contracts
-/// @author Solidity University
+/// @author Malikov Ruslan
 /// @notice Allows users to deploy utility contracts by cloning registered templates.
 /// @dev Uses OpenZeppelin's Clones and Ownable; assumes templates implement IUtilityContract.
 contract DeployManager is IDeployManager, Ownable, ERC165 {
